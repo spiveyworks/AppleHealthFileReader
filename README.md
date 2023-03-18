@@ -1,2 +1,2 @@
 # AppleHealthFileReader
-A c# package for reading exported Apple Health files that contain health records, workouts and clinical records into memory.
+A c# package for reading exported Apple Health Zip files that contain health records, workouts and clinical records into memory. Use LINQ to query the data to generate your own health analytics of your data. This project is not affiliated with Apple in any way.
