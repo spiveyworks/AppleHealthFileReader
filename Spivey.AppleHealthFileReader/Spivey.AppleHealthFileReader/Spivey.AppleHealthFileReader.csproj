@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Title>Apple Health File Reader</Title>
+    <Description>Extract the Apple Health export Zip file and read its contents into data that you can query.</Description>
+    <Copyright>Copyright © Michael Spivey 2023</Copyright>
+    <PackageTags>apple health</PackageTags>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/spiveyworks/AppleHealthFileReader.git</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
