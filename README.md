@@ -7,18 +7,20 @@ To download your Apple Health data, go to your Apple Health app on your iPhone a
 ## Usage
 To use this package, you will need to download your Apple Health data zip file. Then you can use the following code to read the data into memory.
 
-	var reader = new AppleHealthFileReader(@"C:\Users\me\Downloads\export.zip");
-	var myHealthRecords = reader.Records;
-	var myClinicalRecords = reader.ClinicalRecords;
-	var myWorkouts = reader.Workouts;
+	var reader = new XmlHealthDataReader();
+    var data = reader.Load(@"C:\Users\me\Downloads\export.zip");
+    var myHealthRecords = data.Records;
+    var myClinicalRecords = data.ClinicalRecords;
+    var myWorkouts = data.Workouts;
 
 Or if you want to read the data from an XDocument:
 
 	XDocument xdoc = XDocument.Load(@"C:\Users\me\Downloads\export.xml");
-	var reader = new AppleHealthFileReader(xdoc);
-	var myHealthRecords = reader.Records;
-	var myClinicalRecords = reader.ClinicalRecords;
-	var myWorkouts = reader.Workouts;
+	var reader = new XmlHealthDataReader();
+    var data = reader.Load(xdoc);
+    var myHealthRecords = data.Records;
+    var myClinicalRecords = data.ClinicalRecords;
+    var myWorkouts = data.Workouts;
 
 ## Related Packages
 * [Spivey.Health](https://github.com/spiveyworks/Spivey.Health) can be used to convert Apple Health data into a normalized and more efficient data structure.
