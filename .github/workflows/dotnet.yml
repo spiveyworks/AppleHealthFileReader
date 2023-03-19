@@ -38,4 +38,4 @@ jobs:
         PROJECT_FILE_PATH: src/Spivey.AppleHealthFileReader/Spivey.AppleHealthFileReader/Spivey.AppleHealthFileReader.csproj
         # API key to authenticate with NuGet server
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        VERSION_REGEX: '(?<=<Version>)(.*)(?=<\/Version>)'
+        VERSION_REGEX: '<Version>(.*)<\/Version>'
