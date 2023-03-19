@@ -31,17 +31,8 @@ namespace Spivey.AppleHealthFileReader
     // A class that represents the root element of the Apple Health export file
     public class XmlHealthDataReader
     {
-        // A list of record objects
-        public List<Record> Records { get; set; }
-
-        // A list of workout objects
-        public List<Workout> Workouts { get; set; }
-
-        // A list of clinical record objects
-        public List<ClinicalRecord> ClinicalRecords { get; set; }
-
         // A constructor that takes the path of the Apple Health export ZIP file path as a parameter
-        public XmlHealthDataReader(string zipPath)
+        public AppleHealthData Load(string zipPath)
         {
             // Extract the XML file from the ZIP archive
             string xmlPath = ExtractXmlFile(zipPath);
@@ -54,34 +45,38 @@ namespace Spivey.AppleHealthFileReader
 
             // Get the root element
             XElement root = doc.Root;
+            AppleHealthData data = new AppleHealthData();
 
             // Parse the record elements
-            Records = ParseRecords(root);
+            data.Records = ParseRecords(root);
 
             // Parse the workout elements
-            Workouts = ParseWorkouts(root);
+            data.Workouts = ParseWorkouts(root);
 
             // Parse the clinical record elements
-            ClinicalRecords = ParseClinicalRecords(root);
+            data.ClinicalRecords = ParseClinicalRecords(root);
+            return data;
         }
 
         // A constructor that takes an Apple Health export file XML document as a parameter
-        public XmlHealthDataReader(XDocument document)
+        public AppleHealthData Load(XDocument document)
         {
             if (document.Root == null)
                 throw new KeyNotFoundException("Root element is missing from the XML file");
 
             // Get the root element
             XElement root = document.Root;
+            AppleHealthData data = new AppleHealthData();
 
             // Parse the record elements
-            Records = ParseRecords(root);
+            data.Records = ParseRecords(root);
 
             // Parse the workout elements
-            Workouts = ParseWorkouts(root);
+            data.Workouts = ParseWorkouts(root);
 
             // Parse the clinical record elements
-            ClinicalRecords = ParseClinicalRecords(root);
+            data.ClinicalRecords = ParseClinicalRecords(root);
+            return data;
         }
 
         // A method that extracts the XML file from the ZIP archive and returns its path
