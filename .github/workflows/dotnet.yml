@@ -21,10 +21,13 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore ./src/Spivey.AppleHealthFileReader/Spivey.AppleHealthFileReader.sln
+      working-directory: ./src/Spivey.AppleHealthFileReader
+      run: dotnet restore
     - name: Build
+      working-directory: ./src/Spivey.AppleHealthFileReader
       run: dotnet build --no-restore
     - name: Test
+      working-directory: ./src/Spivey.AppleHealthFileReader
       run: dotnet test --no-build --verbosity normal
     - name: Publish NuGet
       # You may pin to the exact commit or the version.
