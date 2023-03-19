@@ -12,9 +12,16 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/spiveyworks/AppleHealthFileReader.git</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/spiveyworks/AppleHealthFileReader</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\..\Health\Spivey.Health\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
