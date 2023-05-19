@@ -52,7 +52,7 @@ namespace Spivey.AppleHealthFileReader
             Source = recordElement.Attribute("sourceName")?.Value ?? string.Empty;
             Unit = recordElement.Attribute("unit")?.Value ?? string.Empty;
             Value = recordElement.Attribute("value")?.Value ?? string.Empty;
-            DateTime.TryParse(recordElement.Attribute("creationDate")?.Value, out DateTime parsedDate);
+            DateTime.TryParse(recordElement.Attribute("startDate")?.Value, out DateTime parsedDate);
             Date = parsedDate;
         }
     }

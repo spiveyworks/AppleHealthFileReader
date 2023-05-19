@@ -68,7 +68,7 @@ namespace Spivey.AppleHealthFileReader
             TotalDistanceUnit = workoutElement.Attribute("totalDistanceUnit")?.Value ?? string.Empty;
             TotalEnergyBurned = double.TryParse(workoutElement.Attribute("totalEnergyBurned")?.Value, out double parsedTotalEnergyBurned) ? parsedTotalEnergyBurned : default;
             TotalEnergyBurnedUnit = workoutElement.Attribute("totalEnergyBurnedUnit")?.Value ?? string.Empty;
-            DateTime.TryParse(workoutElement.Attribute("creationDate")?.Value, out DateTime parsedDate);
+            DateTime.TryParse(workoutElement.Attribute("startDate")?.Value, out DateTime parsedDate);
             Date = parsedDate;
         }
     }

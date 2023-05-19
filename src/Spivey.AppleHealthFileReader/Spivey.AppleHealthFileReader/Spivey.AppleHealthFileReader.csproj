@@ -8,7 +8,7 @@
     <Description>Extract the Apple Health export Zip file and read its contents into data that you can query.</Description>
     <Copyright>Copyright © Michael Spivey 2023</Copyright>
     <PackageTags>apple health</PackageTags>
-    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <AssemblyVersion>1.0.2</AssemblyVersion>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/spiveyworks/AppleHealthFileReader.git</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -16,9 +16,9 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <FileVersion>1.0.1</FileVersion>
+    <FileVersion>1.0.2</FileVersion>
     <Version>$(VersionPrefix)</Version>
-    <VersionPrefix>1.0.1</VersionPrefix>
+    <VersionPrefix>1.0.2</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
