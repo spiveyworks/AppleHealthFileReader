@@ -25,6 +25,7 @@
 
 using System.IO.Compression;
 using System.Xml.Linq;
+using System.Xml;
 
 namespace Spivey.AppleHealthFileReader
 {
@@ -32,29 +33,47 @@ namespace Spivey.AppleHealthFileReader
     public class XmlHealthDataReader
     {
         // A constructor that takes the path of the Apple Health export ZIP file path as a parameter
-        public AppleHealthData Load(string zipPath)
+        public AppleHealthData Load(string zipPath, string exportFileName = "export.xml")
         {
-            // Extract the XML file from the ZIP archive
-            string xmlPath = ExtractXmlFile(zipPath);
+            using ZipArchive archive = ZipFile.OpenRead(zipPath);
+            ZipArchiveEntry? entry = archive.Entries
+                .FirstOrDefault(e => e.Name.Equals(exportFileName, StringComparison.OrdinalIgnoreCase));
 
-            // Load the XML document
-            XDocument doc = XDocument.Load(xmlPath);
+            if (entry == null)
+                throw new FileNotFoundException($"{exportFileName} is missing from the .zip file");
 
-            if (doc.Root== null )
-                throw new KeyNotFoundException("Root element is missing from the XML file");
+            using Stream stream = entry.Open();
+            return Load(stream);
+        }
 
-            // Get the root element
-            XElement root = doc.Root;
-            AppleHealthData data = new AppleHealthData();
+        // Load an Apple Health export from an XML stream
+        public AppleHealthData Load(Stream xmlStream)
+        {
+            var data = new AppleHealthData();
 
-            // Parse the record elements
-            data.Records = ParseRecords(root);
+            using XmlReader reader = XmlReader.Create(xmlStream, new XmlReaderSettings { IgnoreWhitespace = true });
+            while (reader.Read())
+            {
+                if (reader.NodeType != XmlNodeType.Element)
+                    continue;
 
-            // Parse the workout elements
-            data.Workouts = ParseWorkouts(root);
+                switch (reader.Name)
+                {
+                    case "Record":
+                        if (XElement.ReadFrom(reader) is XElement recordElem)
+                            data.Records.Add(new Record(recordElem));
+                        break;
+                    case "Workout":
+                        if (XElement.ReadFrom(reader) is XElement workoutElem)
+                            data.Workouts.Add(new Workout(workoutElem));
+                        break;
+                    case "ClinicalRecord":
+                        if (XElement.ReadFrom(reader) is XElement clinicalElem)
+                            data.ClinicalRecords.Add(new ClinicalRecord(clinicalElem));
+                        break;
+                }
+            }
 
-            // Parse the clinical record elements
-            data.ClinicalRecords = ParseClinicalRecords(root);
             return data;
         }
 
