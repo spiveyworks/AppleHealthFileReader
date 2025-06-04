@@ -34,8 +34,8 @@ namespace Spivey.AppleHealthFileReader
         // A constructor that takes the path of the Apple Health export ZIP file path as a parameter
         public AppleHealthData Load(string zipPath)
         {
-            // Extract the XML file from the ZIP archive
-            string xmlPath = ExtractXmlFile(zipPath);
+            // Extract the XML file from the ZIP archive and capture the temp folder
+            var (xmlPath, tempFolder) = ExtractXmlFile(zipPath);
 
             // Load the XML document
             XDocument doc = XDocument.Load(xmlPath);
@@ -55,6 +55,10 @@ namespace Spivey.AppleHealthFileReader
 
             // Parse the clinical record elements
             data.ClinicalRecords = ParseClinicalRecords(root);
+
+            // Clean up the extracted files
+            Directory.Delete(tempFolder, true);
+
             return data;
         }
 
@@ -80,7 +84,7 @@ namespace Spivey.AppleHealthFileReader
         }
 
         // A method that extracts the XML file from the ZIP archive and returns its path
-        private string ExtractXmlFile(string zipPath, string exportFileName = "export.xml")
+        private (string xmlPath, string tempFolder) ExtractXmlFile(string zipPath, string exportFileName = "export.xml")
         {
             // Create a temporary folder
             string tempFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
@@ -94,8 +98,8 @@ namespace Spivey.AppleHealthFileReader
             if (xmlPath == null)
                 throw new FileNotFoundException($"{exportFileName} is missing from the .zip file");
 
-            // Return the path of the XML file
-            return xmlPath;
+            // Return the path of the XML file and the temp folder
+            return (xmlPath, tempFolder);
         }
 
         // A method that parses the record elements and returns a list of record objects
