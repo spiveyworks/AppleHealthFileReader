@@ -22,5 +22,10 @@ Or if you want to read the data from an XDocument:
     var myClinicalRecords = data.ClinicalRecords;
     var myWorkouts = data.Workouts;
 
+### Handling Large Export Files
+Version 1.1 processes large Apple Health exports (>200&nbsp;MB) more efficiently.
+The reader streams the XML directly from the zip file which reduces memory
+usage when loading big datasets.
+
 ## Related Packages
 * [Spivey.Health](https://github.com/spiveyworks/Spivey.Health) can be used to convert Apple Health data into a normalized and more efficient data structure.
