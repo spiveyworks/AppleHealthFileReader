@@ -51,7 +51,7 @@ namespace Spivey.AppleHealthFileReader
         {
             var data = new AppleHealthData();
 
-            using XmlReader reader = XmlReader.Create(xmlStream, new XmlReaderSettings { IgnoreWhitespace = true });
+            using XmlReader reader = XmlReader.Create(xmlStream, new XmlReaderSettings { IgnoreWhitespace = true, DtdProcessing = DtdProcessing.Parse });
             while (reader.Read())
             {
                 if (reader.NodeType != XmlNodeType.Element)
