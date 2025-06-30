@@ -43,38 +43,15 @@ namespace Spivey.AppleHealthFileReader
                 throw new FileNotFoundException($"{exportFileName} is missing from the .zip file");
 
             using Stream stream = entry.Open();
-            return Load(stream);
+            XDocument doc = XDocument.Load(stream, LoadOptions.None);
+            return Load(doc);
         }
 
         // Load an Apple Health export from an XML stream
         public AppleHealthData Load(Stream xmlStream)
         {
-            var data = new AppleHealthData();
-
-            using XmlReader reader = XmlReader.Create(xmlStream, new XmlReaderSettings { IgnoreWhitespace = true, DtdProcessing = DtdProcessing.Parse });
-            while (reader.Read())
-            {
-                if (reader.NodeType != XmlNodeType.Element)
-                    continue;
-
-                switch (reader.Name)
-                {
-                    case "Record":
-                        if (XElement.ReadFrom(reader) is XElement recordElem)
-                            data.Records.Add(new Record(recordElem));
-                        break;
-                    case "Workout":
-                        if (XElement.ReadFrom(reader) is XElement workoutElem)
-                            data.Workouts.Add(new Workout(workoutElem));
-                        break;
-                    case "ClinicalRecord":
-                        if (XElement.ReadFrom(reader) is XElement clinicalElem)
-                            data.ClinicalRecords.Add(new ClinicalRecord(clinicalElem));
-                        break;
-                }
-            }
-
-            return data;
+            XDocument doc = XDocument.Load(xmlStream, LoadOptions.None);
+            return Load(doc);
         }
 
         // A constructor that takes an Apple Health export file XML document as a parameter
@@ -120,70 +97,31 @@ namespace Spivey.AppleHealthFileReader
         // A method that parses the record elements and returns a list of record objects
         private List<Record> ParseRecords(XElement root)
         {
-            // Create an empty list of record objects
-            List<Record> records = new List<Record>();
-
-            // Get all the record elements
-            IEnumerable<XElement> recordElements = root.Elements("Record");
-
-            // Loop through each record element
-            foreach (XElement recordElement in recordElements)
-            {
-                // Create a record object from the record element
-                Record record = new Record(recordElement);
-
-                // Add the record object to the list
-                records.Add(record);
-            }
-
-            // Return the list of record objects
-            return records;
+            return root
+                .Elements("Record")
+                .AsParallel()
+                .Select(e => new Record(e))
+                .ToList();
         }
 
         // A method that parses the workout elements and returns a list of workout objects
         private List<Workout> ParseWorkouts(XElement root)
         {
-            // Create an empty list of workout objects
-            List<Workout> workouts = new List<Workout>();
-
-            // Get all the workout elements
-            IEnumerable<XElement> workoutElements = root.Elements("Workout");
-
-            // Loop through each workout element
-            foreach (XElement workoutElement in workoutElements)
-            {
-                // Create a workout object from the workout element
-                Workout workout = new Workout(workoutElement);
-
-                // Add the workout object to the list
-                workouts.Add(workout);
-            }
-
-            // Return the list of workout objects
-            return workouts;
+            return root
+                .Elements("Workout")
+                .AsParallel()
+                .Select(e => new Workout(e))
+                .ToList();
         }
 
         // A method that parses the clinical record elements and returns a list of clinical record objects
         private List<ClinicalRecord> ParseClinicalRecords(XElement root)
         {
-            // Create an empty list of clinical record objects
-            List<ClinicalRecord> clinicalRecords = new List<ClinicalRecord>();
-
-            // Get all the clinical record elements
-            IEnumerable<XElement> clinicalRecordElements = root.Elements("ClinicalRecord");
-
-            // Loop through each clinical record element
-            foreach (XElement clinicalRecordElement in clinicalRecordElements)
-            {
-                // Create a clinical record object from the clinical record element
-                ClinicalRecord clinicalRecord = new ClinicalRecord(clinicalRecordElement);
-
-                // Add the clinical record object to the list
-                clinicalRecords.Add(clinicalRecord);
-            }
-
-            // Return the list of clinical record objects
-            return clinicalRecords;
+            return root
+                .Elements("ClinicalRecord")
+                .AsParallel()
+                .Select(e => new ClinicalRecord(e))
+                .ToList();
         }
     }
 }
