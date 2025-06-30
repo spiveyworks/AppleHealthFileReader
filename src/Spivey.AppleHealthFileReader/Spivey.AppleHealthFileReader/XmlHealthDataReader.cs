@@ -85,10 +85,10 @@ namespace Spivey.AppleHealthFileReader
             ZipFile.ExtractToDirectory(zipPath, tempFolder);
 
             // Get the path of the XML file
-            string xmlPath = Directory.GetFiles(tempFolder, exportFileName, SearchOption.AllDirectories).FirstOrDefault();
-
-            if (xmlPath == null)
-                throw new FileNotFoundException($"{exportFileName} is missing from the .zip file");
+            string xmlPath = Directory
+                .GetFiles(tempFolder, exportFileName, SearchOption.AllDirectories)
+                .FirstOrDefault()
+                ?? throw new FileNotFoundException($"{exportFileName} is missing from the .zip file");
 
             // Return the path of the XML file
             return xmlPath;
@@ -100,6 +100,7 @@ namespace Spivey.AppleHealthFileReader
             return root
                 .Elements("Record")
                 .AsParallel()
+                .WithDegreeOfParallelism(Environment.ProcessorCount)
                 .Select(e => new Record(e))
                 .ToList();
         }
@@ -110,6 +111,7 @@ namespace Spivey.AppleHealthFileReader
             return root
                 .Elements("Workout")
                 .AsParallel()
+                .WithDegreeOfParallelism(Environment.ProcessorCount)
                 .Select(e => new Workout(e))
                 .ToList();
         }
@@ -120,6 +122,7 @@ namespace Spivey.AppleHealthFileReader
             return root
                 .Elements("ClinicalRecord")
                 .AsParallel()
+                .WithDegreeOfParallelism(Environment.ProcessorCount)
                 .Select(e => new ClinicalRecord(e))
                 .ToList();
         }
